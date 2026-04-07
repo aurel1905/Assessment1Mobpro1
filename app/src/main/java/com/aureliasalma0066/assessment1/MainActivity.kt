@@ -1,5 +1,6 @@
 package com.aureliasalma0066.assessment1
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -64,6 +65,7 @@ fun ScreenContent(modifier: Modifier = Modifier) {
 }
 
 @Preview(showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 fun MainScreenPreview() {
     Assessment1Theme {
