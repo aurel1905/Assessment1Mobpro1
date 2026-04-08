@@ -7,5 +7,9 @@
     <string name="lebar">Lebar</string>
 
     <string name="hitung">Hitung</string>
+    <string name="reset">Reset</string>
+
+    <!-- Error -->
+    <string name="input_invalid">Input tidak valid</string>
 
 </resources>
