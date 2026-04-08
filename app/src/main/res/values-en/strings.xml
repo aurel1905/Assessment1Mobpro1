@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Geometry Shapes</string>
+
+    <string name="title">Rectangle Calculator</string>
+
+    <string name="panjang">Length</string>
+    <string name="lebar">Width</string>
+
+    <string name="hitung">Calculate</string>
+    <string name="reset">Reset</string>
+
+    <string name="input_invalid">Invalid input</string>
+
+    <string name="luas">Area</string>
+    <string name="keliling">Perimeter</string>
+</resources>
