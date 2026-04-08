@@ -6,6 +6,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -15,7 +16,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aureliasalma0066.assessment1.R
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,7 +30,15 @@ fun MainScreen(navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Kalkulator Bangun Datar") }
+                title = { Text("Kalkulator Bangun Datar") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                }
             )
         }
     ) { padding ->
@@ -44,7 +52,10 @@ fun MainScreen(navController: NavController) {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
 
-            Text("Persegi Panjang", style = MaterialTheme.typography.titleLarge)
+            Text(
+                "Persegi Panjang",
+                style = MaterialTheme.typography.titleLarge
+            )
 
             Image(
                 painter = painterResource(id = R.drawable.persegi),
@@ -58,10 +69,14 @@ fun MainScreen(navController: NavController) {
                 label = { Text("Panjang") },
                 isError = panjangError,
                 trailingIcon = {
-                    if (panjangError) Icon(Icons.Filled.Warning, null)
+                    if (panjangError) {
+                        Icon(Icons.Filled.Warning, contentDescription = null)
+                    }
                 },
                 supportingText = {
-                    if (panjangError) Text("Input tidak valid")
+                    if (panjangError) {
+                        Text("Input tidak valid")
+                    }
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number
@@ -75,10 +90,14 @@ fun MainScreen(navController: NavController) {
                 label = { Text("Lebar") },
                 isError = lebarError,
                 trailingIcon = {
-                    if (lebarError) Icon(Icons.Filled.Warning, null)
+                    if (lebarError) {
+                        Icon(Icons.Filled.Warning, contentDescription = null)
+                    }
                 },
                 supportingText = {
-                    if (lebarError) Text("Input tidak valid")
+                    if (lebarError) {
+                        Text("Input tidak valid")
+                    }
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number
@@ -86,24 +105,40 @@ fun MainScreen(navController: NavController) {
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Button(
-                onClick = {
-                    panjangError = panjang.isEmpty() || panjang == "0"
-                    lebarError = lebar.isEmpty() || lebar == "0"
-
-                    if (panjangError || lebarError) return@Button
-
-                    val p = panjang.toFloat()
-                    val l = lebar.toFloat()
-
-                    val luas = p * l
-                    val keliling = 2 * (p + l)
-
-                    navController.navigate("result/$luas/$keliling")
-                },
+            // 🔥 BUTTONS
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Hitung")
+
+                Button(
+                    onClick = {
+                        panjangError = panjang.isEmpty() || panjang == "0"
+                        lebarError = lebar.isEmpty() || lebar == "0"
+
+                        if (panjangError || lebarError) return@Button
+
+                        val p = panjang.toFloat()
+                        val l = lebar.toFloat()
+
+                        val luas = p * l
+                        val keliling = 2 * (p + l)
+
+                        navController.navigate("result/$luas/$keliling")
+                    },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("Hitung")
+                }
+
+                Button(
+                    onClick = {
+                        navController.popBackStack()
+                    },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("Kembali")
+                }
             }
         }
     }
