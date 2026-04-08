@@ -11,8 +11,10 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aureliasalma0066.assessment1.R
@@ -67,36 +69,64 @@ fun MainScreen(navController: NavController, shape: String) {
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                elevation = CardDefaults.cardElevation(6.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(12.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Masukkan Data $shape",
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Center
+                    )
 
-            Image(
-                painter = painterResource(id = imageRes),
-                contentDescription = null,
-                modifier = Modifier.fillMaxWidth()
-            )
+                    Spacer(modifier = Modifier.height(8.dp))
 
-            OutlinedTextField(
-                value = input1,
-                onValueChange = { input1 = it },
-                label = { Text(label1) },
-                placeholder = { Text("Masukkan $label1") },
-                isError = error1,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                trailingIcon = { if (error1) Icon(Icons.Filled.Warning, null) },
-                modifier = Modifier.fillMaxWidth()
-            )
-            if (shape == "Persegi Panjang" || shape == "Segitiga") {
-                OutlinedTextField(
-                    value = input2,
-                    onValueChange = { input2 = it },
-                    label = { Text(label2) },
-                    placeholder = { Text("Masukkan $label2") },
-                    isError = error2,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    trailingIcon = { if (error2) Icon(Icons.Filled.Warning, null) },
-                    modifier = Modifier.fillMaxWidth()
-                )
+                    Image(
+                        painter = painterResource(id = imageRes),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                elevation = CardDefaults.cardElevation(4.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+
+                    OutlinedTextField(
+                        value = input1,
+                        onValueChange = { input1 = it },
+                        label = { Text(label1) },
+                        placeholder = { Text("Masukkan $label1") },
+                        isError = error1,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        trailingIcon = { if (error1) Icon(Icons.Filled.Warning, null) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    if (shape == "Persegi Panjang" || shape == "Segitiga") {
+                        OutlinedTextField(
+                            value = input2,
+                            onValueChange = { input2 = it },
+                            label = { Text(label2) },
+                            placeholder = { Text("Masukkan $label2") },
+                            isError = error2,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            trailingIcon = { if (error2) Icon(Icons.Filled.Warning, null) },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
             }
 
             Button(
@@ -118,7 +148,7 @@ fun MainScreen(navController: NavController, shape: String) {
                     when (shape) {
                         "Segitiga" -> {
                             luas = 0.5f * a!! * b!!
-                            keliling = a + b + b // asumsi segitiga sama kaki
+                            keliling = a + b + b
                         }
                         "Lingkaran" -> {
                             luas = 3.14f * a!! * a
@@ -136,9 +166,15 @@ fun MainScreen(navController: NavController, shape: String) {
 
                     navController.navigate("result/$luas/$keliling")
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(55.dp),
+                shape = MaterialTheme.shapes.large
             ) {
-                Text("Hitung")
+                Text(
+                    text = "Hitung Sekarang",
+                    style = MaterialTheme.typography.titleMedium
+                )
             }
         }
     }
