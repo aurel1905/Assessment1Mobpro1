@@ -80,6 +80,9 @@ fun MainScreen(navController: NavController) {
                 supportingText = {
                     if (lebarError) Text("Input tidak valid")
                 },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number
+                ),
                 modifier = Modifier.fillMaxWidth()
             )
 
