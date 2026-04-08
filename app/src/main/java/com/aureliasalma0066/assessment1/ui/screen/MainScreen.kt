@@ -19,24 +19,28 @@ import com.aureliasalma0066.assessment1.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController: NavController) {
+fun MainScreen(navController: NavController, shape: String) {
 
-    var panjang by remember { mutableStateOf("") }
-    var panjangError by remember { mutableStateOf(false) }
+    var input1 by remember { mutableStateOf("") }
+    var input2 by remember { mutableStateOf("") }
 
-    var lebar by remember { mutableStateOf("") }
-    var lebarError by remember { mutableStateOf(false) }
+    var error1 by remember { mutableStateOf(false) }
+    var error2 by remember { mutableStateOf(false) }
+
+    val imageRes = when (shape) {
+        "Segitiga" -> R.drawable.segitiga
+        "Lingkaran" -> R.drawable.lingkaran
+        "Persegi" -> R.drawable.persegi
+        else -> R.drawable.persegipanjang
+    }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Kalkulator Bangun Datar") },
+                title = { Text(shape) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Back"
-                        )
+                        Icon(Icons.Filled.ArrowBack, null)
                     }
                 }
             )
@@ -52,93 +56,69 @@ fun MainScreen(navController: NavController) {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
 
-            Text(
-                "Persegi Panjang",
-                style = MaterialTheme.typography.titleLarge
-            )
-
             Image(
-                painter = painterResource(id = R.drawable.persegi),
+                painter = painterResource(id = imageRes),
                 contentDescription = null,
                 modifier = Modifier.fillMaxWidth()
             )
 
             OutlinedTextField(
-                value = panjang,
-                onValueChange = { panjang = it },
-                label = { Text("Panjang") },
-                isError = panjangError,
-                trailingIcon = {
-                    if (panjangError) {
-                        Icon(Icons.Filled.Warning, contentDescription = null)
-                    }
-                },
-                supportingText = {
-                    if (panjangError) {
-                        Text("Input tidak valid")
-                    }
-                },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
-                ),
+                value = input1,
+                onValueChange = { input1 = it },
+                label = { Text("Input 1") },
+                isError = error1,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                trailingIcon = { if (error1) Icon(Icons.Filled.Warning, null) },
                 modifier = Modifier.fillMaxWidth()
             )
 
             OutlinedTextField(
-                value = lebar,
-                onValueChange = { lebar = it },
-                label = { Text("Lebar") },
-                isError = lebarError,
-                trailingIcon = {
-                    if (lebarError) {
-                        Icon(Icons.Filled.Warning, contentDescription = null)
-                    }
-                },
-                supportingText = {
-                    if (lebarError) {
-                        Text("Input tidak valid")
-                    }
-                },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
-                ),
+                value = input2,
+                onValueChange = { input2 = it },
+                label = { Text("Input 2") },
+                isError = error2,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                trailingIcon = { if (error2) Icon(Icons.Filled.Warning, null) },
                 modifier = Modifier.fillMaxWidth()
             )
 
-            // 🔥 BUTTONS
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            Button(
+                onClick = {
+                    error1 = input1.isEmpty()
+                    error2 = input2.isEmpty()
+
+                    if (error1 || error2) return@Button
+
+                    val a = input1.toFloat()
+                    val b = input2.toFloat()
+
+                    val luas: Float
+                    val keliling: Float
+
+                    when (shape) {
+                        "Segitiga" -> {
+                            luas = 0.5f * a * b
+                            keliling = a + b + b
+                        }
+                        "Lingkaran" -> {
+                            luas = 3.14f * a * a
+                            keliling = 2 * 3.14f * a
+                        }
+                        "Persegi" -> {
+                            luas = a * a
+                            keliling = 4 * a
+                        }
+                        else -> {
+                            luas = a * b
+                            keliling = 2 * (a + b)
+                        }
+                    }
+
+                    navController.navigate("result/$luas/$keliling")
+                },
                 modifier = Modifier.fillMaxWidth()
             ) {
-
-                Button(
-                    onClick = {
-                        panjangError = panjang.isEmpty() || panjang == "0"
-                        lebarError = lebar.isEmpty() || lebar == "0"
-
-                        if (panjangError || lebarError) return@Button
-
-                        val p = panjang.toFloat()
-                        val l = lebar.toFloat()
-
-                        val luas = p * l
-                        val keliling = 2 * (p + l)
-
-                        navController.navigate("result/$luas/$keliling")
-                    },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("Hitung")
-                }
-
-                Button(
-                    onClick = {
-                        navController.popBackStack()
-                    },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("Kembali")
-                }
+                Text("Hitung")
             }
         }
     }

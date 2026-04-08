@@ -13,7 +13,13 @@ import androidx.navigation.NavController
 @Composable
 fun HomeScreen(navController: NavController) {
 
-    val options = listOf("Persegi Panjang", "Segitiga")
+    val options = listOf(
+        "Persegi Panjang",
+        "Segitiga",
+        "Lingkaran",
+        "Persegi"
+    )
+
     var selected by remember { mutableStateOf(options[0]) }
 
     Column(
@@ -27,9 +33,10 @@ fun HomeScreen(navController: NavController) {
         Text("Smart Geometry Calculator",
             style = MaterialTheme.typography.titleLarge)
 
-        Text("Aplikasi untuk menghitung luas dan keliling bangun datar.")
+        Text("Aplikasi ini digunakan untuk menghitung luas dan keliling berbagai bangun datar seperti persegi panjang, segitiga, lingkaran, dan persegi.")
 
-        // pilihan bangun datar
+        Text("Pilih bangun datar:")
+
         options.forEach { item ->
             Row(
                 modifier = Modifier
@@ -41,17 +48,14 @@ fun HomeScreen(navController: NavController) {
                     )
                     .padding(8.dp)
             ) {
-                RadioButton(
-                    selected = selected == item,
-                    onClick = null
-                )
-                Text(text = item, modifier = Modifier.padding(start = 8.dp))
+                RadioButton(selected = selected == item, onClick = null)
+                Text(item, modifier = Modifier.padding(start = 8.dp))
             }
         }
 
         Button(
             onClick = {
-                navController.navigate("main")
+                navController.navigate("main/$selected")
             }
         ) {
             Text("Mulai")
