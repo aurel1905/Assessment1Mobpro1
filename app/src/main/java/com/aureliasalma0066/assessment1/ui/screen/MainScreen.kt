@@ -27,6 +27,20 @@ fun MainScreen(navController: NavController, shape: String) {
     var error1 by remember { mutableStateOf(false) }
     var error2 by remember { mutableStateOf(false) }
 
+    val label1 = when (shape) {
+        "Persegi Panjang" -> "Panjang"
+        "Segitiga" -> "Alas"
+        "Lingkaran" -> "Jari-jari"
+        "Persegi" -> "Sisi"
+        else -> "Input 1"
+    }
+
+    val label2 = when (shape) {
+        "Persegi Panjang" -> "Lebar"
+        "Segitiga" -> "Tinggi"
+        else -> ""
+    }
+
     val imageRes = when (shape) {
         "Segitiga" -> R.drawable.segitiga
         "Lingkaran" -> R.drawable.lingkaran
@@ -65,51 +79,57 @@ fun MainScreen(navController: NavController, shape: String) {
             OutlinedTextField(
                 value = input1,
                 onValueChange = { input1 = it },
-                label = { Text("Input 1") },
+                label = { Text(label1) },
+                placeholder = { Text("Masukkan $label1") },
                 isError = error1,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 trailingIcon = { if (error1) Icon(Icons.Filled.Warning, null) },
                 modifier = Modifier.fillMaxWidth()
             )
-
-            OutlinedTextField(
-                value = input2,
-                onValueChange = { input2 = it },
-                label = { Text("Input 2") },
-                isError = error2,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                trailingIcon = { if (error2) Icon(Icons.Filled.Warning, null) },
-                modifier = Modifier.fillMaxWidth()
-            )
+            if (shape == "Persegi Panjang" || shape == "Segitiga") {
+                OutlinedTextField(
+                    value = input2,
+                    onValueChange = { input2 = it },
+                    label = { Text(label2) },
+                    placeholder = { Text("Masukkan $label2") },
+                    isError = error2,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    trailingIcon = { if (error2) Icon(Icons.Filled.Warning, null) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
 
             Button(
                 onClick = {
-                    error1 = input1.isEmpty()
-                    error2 = input2.isEmpty()
+
+                    val a = input1.toFloatOrNull()
+                    val b = input2.toFloatOrNull()
+
+                    error1 = a == null
+                    error2 = if (shape == "Persegi Panjang" || shape == "Segitiga") {
+                        b == null
+                    } else false
 
                     if (error1 || error2) return@Button
-
-                    val a = input1.toFloat()
-                    val b = input2.toFloat()
 
                     val luas: Float
                     val keliling: Float
 
                     when (shape) {
                         "Segitiga" -> {
-                            luas = 0.5f * a * b
-                            keliling = a + b + b
+                            luas = 0.5f * a!! * b!!
+                            keliling = a + b + b // asumsi segitiga sama kaki
                         }
                         "Lingkaran" -> {
-                            luas = 3.14f * a * a
+                            luas = 3.14f * a!! * a
                             keliling = 2 * 3.14f * a
                         }
                         "Persegi" -> {
-                            luas = a * a
+                            luas = a!! * a
                             keliling = 4 * a
                         }
                         else -> {
-                            luas = a * b
+                            luas = a!! * b!!
                             keliling = 2 * (a + b)
                         }
                     }
