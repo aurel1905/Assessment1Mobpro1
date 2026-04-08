@@ -9,7 +9,10 @@
     <string name="hitung">Hitung</string>
     <string name="reset">Reset</string>
 
-    <!-- Error -->
     <string name="input_invalid">Input tidak valid</string>
+
+    <string name="luas">Luas</string>
+    <string name="keliling">Keliling</string>
+
 
 </resources>
